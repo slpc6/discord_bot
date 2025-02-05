@@ -1,0 +1,11 @@
+"""Archivo  para cargar las variables de entorno y configuraciones del bot"""
+
+#External libraries
+import os
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
+TOKEN = os.getenv("TOKEN")
+PREFIX = os.getenv("PREFIX")
