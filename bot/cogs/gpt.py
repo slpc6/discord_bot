@@ -1,9 +1,17 @@
+"""Clase que permite conectar un bot de discord con la api de open ia"""
+
+#External libraries
 from discord.ext import commands
 from openai import OpenAI
 
-import config
+#Own Libraries
+from config import config
+
 
 class Gpt(commands.Cog):
+    """Clase que permite conectar un bot de discord con la api de open ia"""
+
+
     def __init__(self, bot):
         self.bot = bot
         self.api_key =  config.API_KEY

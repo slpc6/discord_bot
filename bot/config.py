@@ -6,6 +6,11 @@ from dotenv import load_dotenv
 
 
 load_dotenv()
-TOKEN = os.getenv("TOKEN")
-PREFIX = os.getenv("PREFIX")
-API_KEY =  os.getenv("OPENAI_API_KEY")
+
+
+class config:
+    
+    load_dotenv()
+    TOKEN = os.getenv("TOKEN")
+    PREFIX = os.getenv("PREFIX")
+    API_KEY =  os.getenv("OPENAI_API_KEY")

@@ -3,7 +3,8 @@
 #External libraries
 import discord
 import os
-import config
+from config import config
+from path import path
 
 from discord.ext import commands
 
@@ -18,8 +19,8 @@ async def load_cogs():
     """Cargar los cogs del bot.
 
     """
-    path = './cogs/'
-    files = [f[:-3] for f in os.listdir(path) if f.endswith(".py") and f != "__init__.py"]
+    cogs_path = path.cogs_path
+    files = [f[:-3] for f in os.listdir(cogs_path) if f.endswith(".py") and f != "__init__.py"]
     
     for file in files:
         await bot.load_extension(f'cogs.{file}')

@@ -7,15 +7,17 @@ import random
 #Ouwn libraries
 import utils.text_loader as tl
 
+
 class General(commands.Cog):
     """Clase para los comando generales de un bot de discord."""
+
 
     def __init__(self, bot):
         """Inicializa el bot.
         args:
             bot (commands.Bot): Bot de discord.
 
-"""
+    """
         self.bot = bot
         self.insultos = tl.text_loader('david.txt')
 
@@ -25,7 +27,7 @@ class General(commands.Cog):
         args:
             ctx (commands.Context): Contexto del comando.
 
-"""
+    """
         await ctx.send("¡Pong!")
 
     
@@ -46,5 +48,5 @@ async def setup(bot):
     args:
         bot (commands.Bot): Bot de discord.
         
-"""
+    """
     await bot.add_cog(General(bot))

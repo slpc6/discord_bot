@@ -2,13 +2,14 @@
 
 #External libraries
 import discord
+import os
 import yt_dlp
 
 from discord.ext import commands
 
 #Ouwn libraries
 from utils.audio_queue import AudioQueue
-
+from path import path
 
 class Music(commands.Cog):
     """Clase que contiene el modulo de música para el bot de Discord."""
@@ -63,15 +64,15 @@ class Music(commands.Cog):
         if not ctx.voice_client:
             await ctx.invoke(self.join)
         
-        await ctx.send("🎵 Soyando el tema...")
-        
+        await ctx.send("🎵 Cargando el tema...")
+        file_path = os.path.join(path.input_path, 'cookie.txt')
+
         ydl_opts = {
             'format': 'bestaudio',
             'quiet': True,
             'default_search': 'ytsearch',
             'noplaylist': True,
-            'cookies': '/workspaces/discord_bot/bot/input/cookie.txt',
-            'verbose': True,
+            'cookies': file_path,
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -103,7 +104,8 @@ class Music(commands.Cog):
             await ctx.send("🎶 Reproduciendo...")
 
             audio_source = discord.FFmpegPCMAudio(audio_url, 
-                                            before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
+                                            before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
+                                            executable=path.ffpeg_local_path
                                             )
             ctx.voice_client.play(audio_source, after=lambda e: self.bot.loop.create_task(self.play_next(ctx)))
         else:
@@ -121,7 +123,7 @@ class Music(commands.Cog):
             ctx.voice_client.stop()
             await ctx.send("Tema pa maluco no (?)")
         else:
-            await ctx.send("Pero haceme debutar ome")
+            await ctx.send("Pero haceme debutar primero.")
 
 
     @commands.command()

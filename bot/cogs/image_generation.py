@@ -1,14 +1,16 @@
+"""Clase que permite conectar un bot de discord con la api de open ia"""
 
-
+#External libraries
 from openai import OpenAI
 
 from discord.ext import commands
-from PIL import Image
 
-import config
+#Own Libraries
+from config import config
+
 
 class ImageGeneration(commands.Cog):
-
+    """Clase que permite conectar un bot de discord con la api de open ia"""
 
     def __init__(self, bot):
         self.bot = bot
