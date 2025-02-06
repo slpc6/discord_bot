@@ -33,9 +33,9 @@ class Music(commands.Cog):
         if ctx.author.voice:
             channel = ctx.author.voice.channel
             await channel.connect()
-            await ctx.send("Me uní al canal de voz ✅")
+            await ctx.send("LLEGUE YO HIJUEPUTAAAAAA.")
         else:
-            await ctx.send("¡Debes estar en un canal de voz!")
+            await ctx.send("El burro por delante.")
 
 
     @commands.command()
@@ -47,31 +47,44 @@ class Music(commands.Cog):
         """
         if ctx.voice_client:
             await ctx.voice_client.disconnect()
-            await ctx.send("Salí del canal de voz ✅")
+            await ctx.send("Suerte gonorreas 😈")
         else:
-            await ctx.send("No estoy en un canal de voz.")
+            await ctx.send("No estoy en el canal de voz, me estoy culiando a su madre.")
 
 
     @commands.command()
-    async def play(self, ctx, url: str):
+    async def play(self, ctx, *, query: str):
         """Agrega una canción a la cola y reproduce.
         args:
             ctx (commands.Context): Contexto de discord.
-            url (str): URL de la canción.
+            query: URL de la canción.
             
         """
         if not ctx.voice_client:
             await ctx.invoke(self.join)
         
-        await ctx.send("🎵 Obteniendo enlace de audio...")
+        await ctx.send("🎵 Soyando el tema...")
 
-        ydl_opts = {'format': 'bestaudio', 'quiet': True}
+        ydl_opts = {
+            'format': 'bestaudio',
+            'quiet': True,
+            'default_search': 'ytsearch',
+            'noplaylist': True,
+        }
+
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(url, download=False)
-            audio_url = info['url']
+            info = ydl.extract_info(f"ytsearch:{query}", download=False)
+            
+            if 'entries' in info:
+                video = info['entries'][0]
+                audio_url = video['url']
+                title = video['title']
+            else:
+                await ctx.send("Escriba bien gonorrea, eso no aparece.")
+                return
 
         self.queue.add(audio_url)
-        await ctx.send(f"🎶 {info['title']} ha sido añadida a la cola.")
+        await ctx.send(f"🎶 {title} Guardelo ahi que ya le suena.")
 
         if not ctx.voice_client.is_playing():
             await self.play_next(ctx)
@@ -83,7 +96,7 @@ class Music(commands.Cog):
             ctx (commands.Context): Contexto de discord.
             
         """
-        if self.queue:
+        if not self.queue.is_empty():
             audio_url = self.queue.pop()
             await ctx.send("🎶 Reproduciendo...")
 
@@ -92,7 +105,7 @@ class Music(commands.Cog):
                                             executable="C:\\Users\\pc1\\Downloads\\ffmpeg-2025-02-02-git-957eb2323a-full_build\\bin\\ffmpeg.exe")
             ctx.voice_client.play(audio_source, after=lambda e: self.bot.loop.create_task(self.play_next(ctx)))
         else:
-            await ctx.send("La cola está vacía.")
+            await ctx.send("Lleneme mas la cola, no pare por favor! UWU")
 
 
     @commands.command()
@@ -104,9 +117,9 @@ class Music(commands.Cog):
         """
         if ctx.voice_client and ctx.voice_client.is_playing():
             ctx.voice_client.stop()
-            await ctx.send("Canción saltada. Reproduciendo siguiente...")
+            await ctx.send("Tema pa maluco no (?)")
         else:
-            await ctx.send("No estoy reproduciendo ninguna canción.")
+            await ctx.send("Pero haceme debutar ome")
 
 
     @commands.command()
@@ -116,10 +129,10 @@ class Music(commands.Cog):
             ctx (commands.Context): Contexto de discord.
             
         """
-        if self.queue:
-            await ctx.send(f"Lista de canciones en cola:\n" + "\n".join(self.queue.get_queue()))
+        if not self.queue.is_empty():
+            await ctx.send(f"Las que se viene pal soye:\n" + "\n".join(self.queue.get_queue()))
         else:
-            await ctx.send("La cola está vacía.")
+            await ctx.send("Lleneme mas la cola, no pare por favor! UWU")
 
 
 async def setup(bot):

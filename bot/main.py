@@ -24,6 +24,7 @@ async def load_cogs():
 """
     await bot.load_extension("cogs.general")
     await bot.load_extension("cogs.music")
+    await bot.load_extension("cogs.copypaste")
 
 @bot.event
 async def on_ready():

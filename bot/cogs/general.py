@@ -24,6 +24,7 @@ class General(commands.Cog):
 """
         await ctx.send("¡Pong!")
 
+
 async def setup(bot):
     """Añade el cog al bot.
     args:
