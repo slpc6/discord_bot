@@ -1,20 +1,18 @@
 
 
-import discord
-import io
-import os
-import requests
+from openai import OpenAI
 
 from discord.ext import commands
 from PIL import Image
 
+import config
 
 class ImageGeneration(commands.Cog):
 
 
     def __init__(self, bot):
         self.bot = bot
-        self.api_key = os.getenv("DEEPAI_API_KEY")
+        self.api_key = config.API_KEY
 
     @commands.command()
     async def generate(self, ctx, *, prompt: str):
@@ -22,32 +20,19 @@ class ImageGeneration(commands.Cog):
         await ctx.send(f"🖌️ Generando imagen para: **{prompt}**...")
 
         try:
-            # Hacer una solicitud a la API de DeepAI
-            response = requests.post(
-                "https://api.deepai.org/api/text2img",
-                data={"text": prompt},
-                headers={"api-key": self.api_key}
+            client = OpenAI(api_key = config.API_KEY)
+
+            response = client.chat.completions.create(
+                messages=[{
+                    "role": "user",
+                    "content": prompt,
+                }],
+                model="dall-e-3",
             )
-            response.raise_for_status()
 
-            # Obtener la URL de la imagen generada
-            image_url = response.json()["output_url"]
-
-            # Descargar la imagen
-            image_response = requests.get(image_url)
-            image_response.raise_for_status()
-
-            # Convertir la imagen a un archivo de Discord
-            image = Image.open(io.BytesIO(image_response.content))
-            buffer = io.BytesIO()
-            image.save(buffer, format="PNG")
-            buffer.seek(0)
-
-            # Enviar la imagen al canal de Discord
-            await ctx.send(file=discord.File(buffer, filename="generated_image.png"))
-        
+            await ctx.send(response)
         except Exception as e:
-            await ctx.send(f"❌ Ocurrió un error al generar la imagen: {e}")
+            await ctx.send(f"❌ Error al obtener respuesta: {e}")
     
 
 async def setup(bot):
