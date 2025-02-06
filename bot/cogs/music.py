@@ -70,7 +70,8 @@ class Music(commands.Cog):
             'quiet': True,
             'default_search': 'ytsearch',
             'noplaylist': True,
-            'cookies': '../input/cookie.txt',
+            'cookies': '/workspaces/discord_bot/bot/input/cookie.txt',
+            'verbose': True,
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
