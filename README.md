@@ -9,11 +9,12 @@ Este es un bot de Discord desarrollado en Python utilizando la librería `discor
 - **Saltar canciones**: Los usuarios pueden saltar la canción actual y pasar a la siguiente en la cola.
 - **Listar la cola**: Muestra las canciones que están en la cola de reproducción.
 - **Comandos básicos**: Incluye comandos como `ping` para verificar la latencia del bot.
-
+- **Enviar mensajes predefinidos**: Envia un mensaje aleatori de una lista de mesajes predefinidos.
 ## Estructura del proyecto
 
 El proyecto está organizado en módulos para facilitar la escalabilidad y el mantenimiento. A continuación, se describe la estructura de archivos y carpetas:
 
+```
 bot/
 │
 ├── main.py # Punto de entrada del bot
@@ -23,7 +24,7 @@ bot/
 ├── utils/ # Carpeta para utilidades
 │ └── audio_queue.py # Módulo para manejar la cola de reproducción
 └── config.py # Configuración del bot (token, prefijo, etc.)
-
+```
 
 ### `main.py`
 
@@ -35,6 +36,7 @@ Contiene los módulos de comandos. Cada módulo es una clase que hereda de `comm
 
 - **`general.py`**: Contiene comandos generales como `ping`.
 - **`music.py`**: Contiene todos los comandos relacionados con la reproducción de música, como `play`, `skip`, `queue_list`, etc.
+- **`copypaste.py`**: Contiene los comandos para generar un copy paste aleatorio.
 
 ### `utils/`
 

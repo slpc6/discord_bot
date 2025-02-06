@@ -80,7 +80,7 @@ class Music(commands.Cog):
                 audio_url = video['url']
                 title = video['title']
             else:
-                await ctx.send("Escriba bien gonorrea, eso no aparece.")
+                await ctx.send("Escriba bien gonorrea, eso no aparece malparido.")
                 return
 
         self.queue.add(audio_url)
