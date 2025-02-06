@@ -64,12 +64,13 @@ class Music(commands.Cog):
             await ctx.invoke(self.join)
         
         await ctx.send("🎵 Soyando el tema...")
-
+        
         ydl_opts = {
             'format': 'bestaudio',
             'quiet': True,
             'default_search': 'ytsearch',
             'noplaylist': True,
+            'cookies': '../input/cookie.txt',
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -101,8 +102,8 @@ class Music(commands.Cog):
             await ctx.send("🎶 Reproduciendo...")
 
             audio_source = discord.FFmpegPCMAudio(audio_url, 
-                                            before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", 
-                                            executable="C:\\Users\\pc1\\Downloads\\ffmpeg-2025-02-02-git-957eb2323a-full_build\\bin\\ffmpeg.exe")
+                                            before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
+                                            )
             ctx.voice_client.play(audio_source, after=lambda e: self.bot.loop.create_task(self.play_next(ctx)))
         else:
             await ctx.send("Lleneme mas la cola, no pare por favor! UWU")

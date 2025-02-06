@@ -174,3 +174,5 @@ cython_debug/
 .pypirc
 
 __init__.py
+
+bot/input/cookie.txt

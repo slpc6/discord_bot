@@ -18,7 +18,7 @@ async def load_cogs():
     """Cargar los cogs del bot.
 
     """
-    path = 'bot\\cogs\\'
+    path = './cogs/'
     files = [f[:-3] for f in os.listdir(path) if f.endswith(".py") and f != "__init__.py"]
     
     for file in files:
