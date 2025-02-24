@@ -22,6 +22,7 @@ class Music(commands.Cog):
     """
         self.bot = bot
         self.queue = AudioQueue()
+        self.exe_path = None
 
 
     @commands.command()
@@ -103,9 +104,12 @@ class Music(commands.Cog):
             audio_url = self.queue.pop()
             await ctx.send("🎶 Reproduciendo...")
 
+            if os.name == 'nt':
+                self.exe_path = path.ffpeg_local_path
+
             audio_source = discord.FFmpegPCMAudio(audio_url, 
                                             before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
-                                            executable=path.ffpeg_local_path
+                                            executable = self.exe_path
                                             )
             ctx.voice_client.play(audio_source, after=lambda e: self.bot.loop.create_task(self.play_next(ctx)))
         else:
