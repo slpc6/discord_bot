@@ -20,11 +20,15 @@ bot = commands.Bot(command_prefix=config.PREFIX, intents=intents)
 app = FastAPI(version="1.0.0", title="Discord bot", description="")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get(path='/')
+def main():
+    return {'hola': 'Hola mundo'}
 
 async def load_cogs():
     """Cargar los cogs del bot.
