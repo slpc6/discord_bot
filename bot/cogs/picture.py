@@ -1,0 +1,121 @@
+"""Clase para el manejo de imágenes y videos en el bot de discord."""
+
+#External libraries
+from discord.ext import commands
+import discord
+import os
+import random
+from path import path
+
+
+class Picture(commands.Cog):
+    """Clase para el manejo de imágenes y videos en el bot de discord."""
+
+
+    def __init__(self, bot):
+        """Inicializa el bot.
+        args:
+            bot (commands.Bot): Bot de discord.
+        """
+        self.bot = bot
+        self.media_path = os.path.join(path.input_path, 'media')
+        self.image_extensions = ('.png', '.jpg', '.jpeg', '.gif')
+        self.video_extensions = ('.mp4', '.mov', '.avi', '.mkv', '.webm')
+
+
+    def get_media_files(self, media_type='image'):
+        """Obtiene la lista de archivos según el tipo de medio.
+        args:
+            media_type (str): Tipo de medio ('image' o 'video')
+        returns:
+            list: Lista de archivos del tipo especificado
+        """
+        extensions = self.image_extensions if media_type == 'image' else self.video_extensions
+        return [f for f in os.listdir(self.media_path) 
+                if f.lower().endswith(extensions)]
+
+
+    @commands.command()
+    async def image(self, ctx):
+        """Envía una imagen aleatoria del directorio de medios.
+        args:
+            ctx (commands.Context): Contexto del comando.
+        """
+        try:
+            images = self.get_media_files('image')
+            
+            if not images:
+                await ctx.send("No hay imágenes disponibles en el directorio.")
+                return
+            
+            random_image = random.choice(images)
+            image_path = os.path.join(self.media_path, random_image)
+            
+            # Enviar la imagen
+            with open(image_path, 'rb') as f:
+                await ctx.send(file=discord.File(f, filename=random_image))
+            
+        except Exception as e:
+            await ctx.send(f"Error al enviar la imagen: {str(e)}")
+
+
+    @commands.command()
+    async def video(self, ctx):
+        """Envía un video aleatorio del directorio de medios.
+        args:
+            ctx (commands.Context): Contexto del comando.
+        """
+        try:
+            videos = self.get_media_files('video')
+            
+            if not videos:
+                await ctx.send("No hay videos disponibles en el directorio.")
+                return
+            
+            random_video = random.choice(videos)
+            video_path = os.path.join(self.media_path, random_video)
+            
+            # Enviar el video
+            with open(video_path, 'rb') as f:
+                await ctx.send(file=discord.File(f, filename=random_video))
+            
+        except Exception as e:
+            await ctx.send(f"Error al enviar el video: {str(e)}")
+
+
+    @commands.command()
+    async def media(self, ctx, media_name: str):
+        """Envía un archivo multimedia específico por nombre.
+        args:
+            ctx (commands.Context): Contexto del comando.
+            media_name (str): Nombre del archivo a enviar.
+        """
+        try:
+            # Buscar el archivo con el nombre proporcionado
+            media_found = None
+            for file in os.listdir(self.media_path):
+                if file.lower().startswith(media_name.lower()) and \
+                   (file.lower().endswith(self.image_extensions) or 
+                    file.lower().endswith(self.video_extensions)):
+                    media_found = file
+                    break
+            
+            if not media_found:
+                await ctx.send(f"No se encontró ningún archivo que comience con '{media_name}'")
+                return
+            
+            # Enviar el archivo
+            media_path = os.path.join(self.media_path, media_found)
+            with open(media_path, 'rb') as f:
+                await ctx.send(file=discord.File(f, filename=media_found))
+            
+        except Exception as e:
+            await ctx.send(f"Error al enviar el archivo: {str(e)}")
+
+
+async def setup(bot):
+    """Añade el cog al bot.
+    args:
+        bot (commands.Bot): Bot de discord.
+    """
+    await bot.add_cog(Picture(bot))

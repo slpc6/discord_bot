@@ -176,3 +176,6 @@ cython_debug/
 __init__.py
 
 bot/input/cookie.txt
+
+.ffmpeg/
+.ffmpeg
