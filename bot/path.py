@@ -12,3 +12,5 @@ class path:
     utils_path = os.path.join(root, 'utils')
 
     ffpeg_local_path = root + '\\..\\ffmpeg\\bin\\ffmpeg.exe'
+
+    routers = os.path.join(root, 'router')
