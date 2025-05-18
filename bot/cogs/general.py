@@ -44,7 +44,7 @@ class General(commands.Cog):
     
 
     @commands.command()
-    async def help(self, ctx):
+    async def info(self, ctx):
         """Responde con el link donde se ve la descripcion y funcionamiento del proyecto.
         args:
             ctx: (commands.Context): Contexto del comando.
