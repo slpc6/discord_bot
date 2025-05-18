@@ -41,6 +41,16 @@ class General(commands.Cog):
         num = random.randint(0, len(self.insultos)-1)
 
         await ctx.send(self.insultos[num])
+    
+
+    @commands.command()
+    async def help(self, ctx):
+        """Responde con el link donde se ve la descripcion y funcionamiento del proyecto.
+        args:
+            ctx: (commands.Context): Contexto del comando.
+        
+        """
+        await ctx.send('pagina de info del bot: https://discord-bot-x0nf.onrender.com/')
 
 
 async def setup(bot):
