@@ -19,6 +19,7 @@ class Picture(commands.Cog):
         """
         self.bot = bot
         self.media_path = os.path.join(path.input_path, 'media')
+        self.media_path_lol = os.path.join(path.input_path, 'Lol')
         self.image_extensions = ('.png', '.jpg', '.jpeg', '.gif')
         self.video_extensions = ('.mp4', '.mov', '.avi', '.mkv', '.webm')
 
@@ -30,8 +31,13 @@ class Picture(commands.Cog):
         returns:
             list: Lista de archivos del tipo especificado
         """
-        extensions = self.image_extensions if media_type == 'image' else self.video_extensions
-        return [f for f in os.listdir(self.media_path) 
+        if media_type == 'lol':
+            extensions = self.video_extensions
+            return [f for f in os.listdir(self.media_path_lol) 
+                if f.lower().endswith(extensions)]
+        else:
+            extensions = self.image_extensions if media_type == 'image' else self.video_extensions
+            return [f for f in os.listdir(self.media_path) 
                 if f.lower().endswith(extensions)]
 
 
@@ -74,6 +80,30 @@ class Picture(commands.Cog):
             
             random_video = random.choice(videos)
             video_path = os.path.join(self.media_path, random_video)
+            
+            # Enviar el video
+            with open(video_path, 'rb') as f:
+                await ctx.send(file=discord.File(f, filename=random_video))
+            
+        except Exception as e:
+            await ctx.send(f"Error al enviar el video: {str(e)}")
+
+
+    @commands.command()
+    async def videolol(self, ctx):
+        """Envía un video aleatorio del directorio de medios.
+        args:
+            ctx (commands.Context): Contexto del comando.
+        """
+        try:
+            videos = self.get_media_files('lol')
+            
+            if not videos:
+                await ctx.send("No hay videos disponibles en el directorio.")
+                return
+            
+            random_video = random.choice(videos)
+            video_path = os.path.join(self.media_path_lol, random_video)
             
             # Enviar el video
             with open(video_path, 'rb') as f:
