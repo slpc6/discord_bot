@@ -24,6 +24,22 @@ class Picture(commands.Cog):
         self.video_extensions = ('.mp4', '.mov', '.avi', '.mkv', '.webm')
 
 
+    def get_files_recursively(self, directory, extensions):
+        """Obtiene archivos recursivamente desde un directorio y sus subdirectorios.
+        args:
+            directory (str): Directorio base para la búsqueda
+            extensions (tuple): Extensiones de archivo a buscar
+        returns:
+            list: Lista de rutas completas de archivos encontrados
+        """
+        files = []
+        for root, _, filenames in os.walk(directory):
+            for filename in filenames:
+                if filename.lower().endswith(extensions):
+                    files.append(os.path.join(root, filename))
+        return files
+
+
     def get_media_files(self, media_type='image'):
         """Obtiene la lista de archivos según el tipo de medio.
         args:
@@ -33,12 +49,10 @@ class Picture(commands.Cog):
         """
         if media_type == 'lol':
             extensions = self.video_extensions
-            return [f for f in os.listdir(self.media_path_lol) 
-                if f.lower().endswith(extensions)]
+            return self.get_files_recursively(self.media_path_lol, extensions)
         else:
             extensions = self.image_extensions if media_type == 'image' else self.video_extensions
-            return [f for f in os.listdir(self.media_path) 
-                if f.lower().endswith(extensions)]
+            return self.get_files_recursively(self.media_path, extensions)
 
 
     @commands.command()
@@ -55,11 +69,10 @@ class Picture(commands.Cog):
                 return
             
             random_image = random.choice(images)
-            image_path = os.path.join(self.media_path, random_image)
             
             # Enviar la imagen
-            with open(image_path, 'rb') as f:
-                await ctx.send(file=discord.File(f, filename=random_image))
+            with open(random_image, 'rb') as f:
+                await ctx.send(file=discord.File(f, filename=os.path.basename(random_image)))
             
         except Exception as e:
             await ctx.send(f"Error al enviar la imagen: {str(e)}")
@@ -79,11 +92,10 @@ class Picture(commands.Cog):
                 return
             
             random_video = random.choice(videos)
-            video_path = os.path.join(self.media_path, random_video)
             
             # Enviar el video
-            with open(video_path, 'rb') as f:
-                await ctx.send(file=discord.File(f, filename=random_video))
+            with open(random_video, 'rb') as f:
+                await ctx.send(file=discord.File(f, filename=os.path.basename(random_video)))
             
         except Exception as e:
             await ctx.send(f"Error al enviar el video: {str(e)}")
@@ -103,11 +115,10 @@ class Picture(commands.Cog):
                 return
             
             random_video = random.choice(videos)
-            video_path = os.path.join(self.media_path_lol, random_video)
             
             # Enviar el video
-            with open(video_path, 'rb') as f:
-                await ctx.send(file=discord.File(f, filename=random_video))
+            with open(random_video, 'rb') as f:
+                await ctx.send(file=discord.File(f, filename=os.path.basename(random_video)))
             
         except Exception as e:
             await ctx.send(f"Error al enviar el video: {str(e)}")
@@ -123,11 +134,14 @@ class Picture(commands.Cog):
         try:
             # Buscar el archivo con el nombre proporcionado
             media_found = None
-            for file in os.listdir(self.media_path):
-                if file.lower().startswith(media_name.lower()) and \
-                   (file.lower().endswith(self.image_extensions) or 
-                    file.lower().endswith(self.video_extensions)):
-                    media_found = file
+            for root, _, filenames in os.walk(self.media_path):
+                for filename in filenames:
+                    if filename.lower().startswith(media_name.lower()) and \
+                       (filename.lower().endswith(self.image_extensions) or 
+                        filename.lower().endswith(self.video_extensions)):
+                        media_found = os.path.join(root, filename)
+                        break
+                if media_found:
                     break
             
             if not media_found:
@@ -135,9 +149,8 @@ class Picture(commands.Cog):
                 return
             
             # Enviar el archivo
-            media_path = os.path.join(self.media_path, media_found)
-            with open(media_path, 'rb') as f:
-                await ctx.send(file=discord.File(f, filename=media_found))
+            with open(media_found, 'rb') as f:
+                await ctx.send(file=discord.File(f, filename=os.path.basename(media_found)))
             
         except Exception as e:
             await ctx.send(f"Error al enviar el archivo: {str(e)}")
