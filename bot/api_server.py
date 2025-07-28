@@ -28,26 +28,6 @@ def main():
     <html>
         <head>
             <title>Discord Bot Documentation</title>
-            <style>
-                body {{
-                    font-family: Arial, sans-serif;
-                    line-height: 1.6;
-                    max-width: 800px;
-                    margin: 0 auto;
-                    padding: 20px;
-                }}
-                code {{
-                    background-color: #f4f4f4;
-                    padding: 2px 5px;
-                    border-radius: 3px;
-                }}
-                pre {{
-                    background-color: #f4f4f4;
-                    padding: 15px;
-                    border-radius: 5px;
-                    overflow-x: auto;
-                }}
-            </style>
         </head>
         <body>
             {html_content}
