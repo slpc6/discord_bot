@@ -5,6 +5,8 @@ import sys
 import os
 import asyncio
 from utils.api_poller import APIPoller
+from dotenv import load_dotenv
+
 
 async def run_services():
     """Ejecuta el bot, el servidor API y el poller en procesos separados."""
@@ -42,5 +44,7 @@ async def run_services():
         )
         print("Servicios detenidos.")
 
+
 if __name__ == "__main__":
+    load_dotenv()
     asyncio.run(run_services()) 
